@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Inter', 'Noto Sans Bengali', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-bangla: 'Noto Sans Bengali', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand: #1b4d3e;
+    --color-brand-dark: #14382d;
+    --color-brand-soft: #ecfdf5;
+    --color-accent: #d32f2f;
+    --color-accent-dark: #b71c1c;
+    --color-ink: #212529;
+    --color-surface: #f8f9fa;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+    }
+
+    html:lang(bn) body {
+        font-family: var(--font-bangla);
+    }
+
+    summary {
+        list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+}
+
+@layer components {
+    .btn-donate {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3.5 font-bold text-white transition hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-brand px-6 py-3.5 font-semibold text-brand transition hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
+    }
+
+    .form-input {
+        @apply w-full rounded-lg border-2 border-gray-200 bg-white px-3 py-3 focus:border-brand focus:outline-none;
+    }
+}

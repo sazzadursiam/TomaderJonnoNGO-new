@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    use WithoutModelEvents;
+
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            SettingSeeder::class,
+            ProgramSeeder::class,
+            StatSeeder::class,
+            StorySeeder::class,
+        ]);
+
+        if (app()->isLocal()) {
+            User::query()->firstOrCreate(
+                ['email' => 'admin@tomaderjonno.org'],
+                ['name' => 'Admin', 'password' => 'password'],
+            );
+        }
+    }
+}
