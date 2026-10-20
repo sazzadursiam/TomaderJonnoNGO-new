@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
  */
 class DemoContentSeeder extends Seeder
 {
-    private const string DEMO_DIRECTORY = 'demo';
+    public const string DEMO_DIRECTORY = 'demo';
 
     /**
      * Background gradients for generated photos: [from, to] RGB triples.

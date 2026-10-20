@@ -70,7 +70,7 @@ class StorySeeder extends Seeder
         ];
 
         foreach ($stories as $index => $story) {
-            Story::query()->updateOrCreate(
+            Story::query()->firstOrCreate(
                 ['slug' => $story['slug']],
                 [...$story, 'is_published' => true, 'published_at' => now()->subDays($index)],
             );

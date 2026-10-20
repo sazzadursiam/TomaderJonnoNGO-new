@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['slug', 'icon', 'title', 'page_title', 'summary', 'description', 'overview', 'image', 'focus_areas', 'wings', 'sort_order', 'is_published'])]
+#[Fillable(['slug', 'icon', 'title', 'page_title', 'summary', 'description', 'overview', 'image', 'focus_areas', 'wings', 'gallery', 'sort_order', 'is_published'])]
 class Program extends Model
 {
     /** @use HasFactory<ProgramFactory> */
@@ -42,6 +42,7 @@ class Program extends Model
             'overview' => 'array',
             'focus_areas' => 'array',
             'wings' => 'array',
+            'gallery' => 'array',
             'is_published' => 'boolean',
         ];
     }

@@ -20,7 +20,7 @@ class TeamMemberSeeder extends Seeder
         ];
 
         foreach ($roles as $index => [$roleEn, $roleBn, $bioEn, $bioBn]) {
-            TeamMember::query()->updateOrCreate(
+            TeamMember::query()->firstOrCreate(
                 ['sort_order' => $index + 1],
                 [
                     'name' => ['en' => null, 'bn' => null],

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             StatSeeder::class,
             StorySeeder::class,
             TeamMemberSeeder::class,
+            SitePhotoSeeder::class,
         ]);
 
         if (app()->isLocal()) {

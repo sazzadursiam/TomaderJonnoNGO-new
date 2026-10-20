@@ -55,11 +55,25 @@
                 'grid-cols-2 lg:grid-cols-4' => $slots >= 4,
             ])>
                 @for ($index = 0; $index < $slots; $index++)
-                    <x-photo :src="$images[$index] ?? null" :alt="$wingTitle" :icon="$program->icon" :class="$slots === 1 ? 'h-56 sm:h-80' : 'h-44 sm:h-56'" />
+                    <x-photo :src="$images[$index] ?? null" :alt="$wingTitle" :icon="$program->icon" lightbox :class="$slots === 1 ? 'h-56 sm:h-80' : 'h-44 sm:h-56'" />
                 @endfor
             </div>
         </x-section>
     @endforeach
+
+    @php($gallery = array_values(array_filter($program->gallery ?? [])))
+    @if ($gallery !== [])
+        <x-section :heading="__('Photo Gallery')" :intro="__('Moments from our work in the field.')" muted>
+            <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4" data-reveal-stagger>
+                @foreach ($gallery as $photo)
+                    <x-photo :src="$photo" :alt="$title" lightbox @class([
+                        'h-40 sm:h-52',
+                        'md:col-span-2 md:row-span-2 md:h-full' => $loop->first && count($gallery) >= 5,
+                    ]) />
+                @endforeach
+            </div>
+        </x-section>
+    @endif
 
     <x-donate-banner :message="$program->icon === 'women' ? __('Help a woman build her own livelihood.') : __('Support this program with a gift today.')" />
 </x-layouts.app>

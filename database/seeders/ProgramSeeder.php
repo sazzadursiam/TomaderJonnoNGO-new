@@ -13,7 +13,7 @@ class ProgramSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->programs() as $index => $program) {
-            Program::query()->updateOrCreate(
+            Program::query()->firstOrCreate(
                 ['slug' => $program['slug']],
                 [...$program, 'sort_order' => $index + 1, 'is_published' => true],
             );

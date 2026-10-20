@@ -91,7 +91,7 @@ class ProgramForm
                                     ->image()
                                     ->multiple()
                                     ->reorderable()
-                                    ->maxFiles(8)
+                                    ->maxFiles(12)
                                     ->disk('public')
                                     ->directory('programs/wings')
                                     ->maxSize(4096),
@@ -101,6 +101,22 @@ class ProgramForm
                             ->itemLabel(fn (array $state): ?string => $state['title']['en'] ?? null)
                             ->addActionLabel('Add wing')
                             ->defaultItems(0),
+                    ]),
+
+                Section::make('Photo gallery')
+                    ->description('Shown at the bottom of the program page; visitors can click a photo to enlarge it.')
+                    ->collapsible()
+                    ->schema([
+                        FileUpload::make('gallery')
+                            ->hiddenLabel()
+                            ->image()
+                            ->multiple()
+                            ->reorderable()
+                            ->panelLayout('grid')
+                            ->maxFiles(24)
+                            ->disk('public')
+                            ->directory('programs/gallery')
+                            ->maxSize(4096),
                     ]),
             ]);
     }

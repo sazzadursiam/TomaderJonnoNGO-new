@@ -20,7 +20,7 @@ class StatSeeder extends Seeder
         ];
 
         foreach ($stats as $index => [$value, $labelEn, $labelBn]) {
-            Stat::query()->updateOrCreate(
+            Stat::query()->firstOrCreate(
                 ['sort_order' => $index + 1],
                 ['value' => $value, 'suffix' => '+', 'label' => ['en' => $labelEn, 'bn' => $labelBn]],
             );

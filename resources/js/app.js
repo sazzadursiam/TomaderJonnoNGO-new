@@ -492,7 +492,65 @@ function initFloatingHearts() {
     });
 }
 
+/**
+ * Lightbox for [data-lightbox] photo links, with previous/next within the same section.
+ */
+function initLightbox() {
+    const dialog = document.querySelector('[data-lightbox-dialog]');
+
+    if (!dialog || typeof dialog.showModal !== 'function') {
+        return;
+    }
+
+    const image = dialog.querySelector('[data-lightbox-image]');
+    const caption = dialog.querySelector('[data-lightbox-caption]');
+    let group = [];
+    let current = 0;
+
+    const show = (index) => {
+        current = (index + group.length) % group.length;
+        const link = group[current];
+        image.src = link.href;
+        image.alt = link.dataset.caption || '';
+        caption.textContent = group.length > 1 ? `${link.dataset.caption || ''} · ${formatNumber(current + 1)}/${formatNumber(group.length)}` : link.dataset.caption || '';
+        dialog.querySelector('[data-lightbox-prev]').hidden = group.length < 2;
+        dialog.querySelector('[data-lightbox-next]').hidden = group.length < 2;
+    };
+
+    document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[data-lightbox]');
+
+        if (!link) {
+            return;
+        }
+
+        event.preventDefault();
+        const scope = link.closest('section') ?? document;
+        group = [...scope.querySelectorAll('a[data-lightbox]')];
+        show(group.indexOf(link));
+        dialog.showModal();
+    });
+
+    dialog.querySelector('[data-lightbox-close]').addEventListener('click', () => dialog.close());
+    dialog.querySelector('[data-lightbox-prev]').addEventListener('click', () => show(current - 1));
+    dialog.querySelector('[data-lightbox-next]').addEventListener('click', () => show(current + 1));
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+            dialog.close();
+        }
+    });
+    dialog.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+            show(current - 1);
+        } else if (event.key === 'ArrowRight') {
+            show(current + 1);
+        }
+    });
+    dialog.addEventListener('close', () => image.removeAttribute('src'));
+}
+
 initDrawer();
+initLightbox();
 initCounters();
 initQuickGive();
 initReveal();
