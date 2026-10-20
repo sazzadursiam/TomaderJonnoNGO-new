@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['slug', 'icon', 'title', 'summary', 'description', 'overview', 'image', 'focus_areas', 'wings', 'sort_order', 'is_published'])]
+#[Fillable(['slug', 'icon', 'title', 'page_title', 'summary', 'description', 'overview', 'image', 'focus_areas', 'wings', 'sort_order', 'is_published'])]
 class Program extends Model
 {
     /** @use HasFactory<ProgramFactory> */
@@ -36,6 +36,7 @@ class Program extends Model
     {
         return [
             'title' => 'array',
+            'page_title' => 'array',
             'summary' => 'array',
             'description' => 'array',
             'overview' => 'array',
@@ -43,6 +44,14 @@ class Program extends Model
             'wings' => 'array',
             'is_published' => 'boolean',
         ];
+    }
+
+    /**
+     * Heading for the program's own page, falling back to the shorter menu/card title.
+     */
+    public function pageTitle(?string $locale = null): string
+    {
+        return $this->translate('page_title', $locale) ?: $this->translate('title', $locale);
     }
 
     /**

@@ -15,6 +15,105 @@
     --color-accent-dark: #b71c1c;
     --color-ink: #212529;
     --color-surface: #f8f9fa;
+
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --animate-fade-up: fade-up 0.8s var(--ease-out-soft) both;
+    --animate-fade-in: fade-in 0.5s ease-out both;
+    --animate-slide-in-right: slide-in-right 0.9s var(--ease-out-soft) both;
+    --animate-float: float 9s ease-in-out infinite;
+    --animate-float-slow: float 14s ease-in-out infinite reverse;
+    --animate-heartbeat: heartbeat 1.8s ease-in-out infinite;
+    --animate-gradient: gradient-shift 12s ease infinite;
+
+    @keyframes fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slide-in-right {
+        from {
+            opacity: 0;
+            transform: translateX(40px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translate(0, 0) scale(1);
+        }
+        50% {
+            transform: translate(18px, -22px) scale(1.06);
+        }
+    }
+
+    @keyframes heartbeat {
+        0%,
+        40%,
+        100% {
+            transform: scale(1);
+        }
+        20% {
+            transform: scale(1.18);
+        }
+    }
+
+    @keyframes ripple {
+        to {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(4);
+        }
+    }
+
+    @keyframes heart-float {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, 0) scale(0.6);
+        }
+        15% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: translate(calc(-50% + var(--drift, 0px)), -140px) scale(1.2) rotate(var(--spin, 0deg));
+        }
+    }
+
+    @keyframes caret-blink {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes gradient-shift {
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
 }
 
 @layer base {
@@ -38,14 +137,171 @@
 
 @layer components {
     .btn-donate {
-        @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3.5 font-bold text-white transition hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+        @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-accent px-6 py-3.5 font-bold text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-accent-dark hover:shadow-lg hover:shadow-accent/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-y-0;
+    }
+
+    /* Light sweep across the donate button on hover. */
+    .btn-donate::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+        transform: translateX(-120%);
+        transition: transform 0.7s var(--ease-out-soft);
+        pointer-events: none;
+    }
+
+    .btn-donate:hover::after {
+        transform: translateX(120%);
     }
 
     .btn-outline {
-        @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-brand px-6 py-3.5 font-semibold text-brand transition hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-brand px-6 py-3.5 font-semibold text-brand transition duration-300 hover:-translate-y-0.5 hover:bg-brand hover:text-white hover:shadow-lg hover:shadow-brand/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:translate-y-0;
     }
 
     .form-input {
-        @apply w-full rounded-lg border-2 border-gray-200 bg-white px-3 py-3 focus:border-brand focus:outline-none;
+        @apply w-full rounded-lg border-2 border-gray-200 bg-white px-3 py-3 transition focus:border-brand focus:shadow-[0_0_0_4px] focus:shadow-brand/10 focus:outline-none;
+    }
+}
+
+/*
+ * Scroll reveal: elements marked [data-reveal] (or children of [data-reveal-stagger]) start hidden and fade up
+ * once resources/js/app.js adds .is-visible. Only applies when JS is running (html.js), so content is never
+ * hidden without it. .reveal-done hands control back to the element's own hover transitions.
+ */
+.js [data-reveal]:not(.reveal-done),
+.js [data-reveal-stagger] > :not(.reveal-done) {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.8s var(--ease-out-soft),
+        transform 0.8s var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-visible,
+.js [data-reveal-stagger] > .is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Accent bars under headings draw from left to right once their block is revealed. */
+.heading-bar {
+    transform-origin: left;
+    transition: transform 0.9s var(--ease-out-soft) 0.25s;
+}
+
+.js [data-reveal]:not(.is-visible, .reveal-done) .heading-bar,
+.js .heading-bar[data-draw]:not(.is-drawn) {
+    transform: scaleX(0);
+}
+
+/* Click ripple for buttons (spawned by resources/js/app.js). */
+.ripple {
+    position: absolute;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.45);
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple 0.65s ease-out forwards;
+    pointer-events: none;
+}
+
+.btn-outline .ripple {
+    background: rgb(27 77 62 / 0.25);
+}
+
+/* Small hearts that float up from the donate button. */
+.floating-heart {
+    position: fixed;
+    z-index: 60;
+    color: var(--color-accent);
+    pointer-events: none;
+    animation: heart-float 1s var(--ease-out-soft) forwards;
+}
+
+.typewriter-caret {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    margin-left: 2px;
+    vertical-align: -0.15em;
+    background: currentColor;
+    animation: caret-blink 1s step-end infinite;
+}
+
+/* "How your donation helps" connector line, drawn as it scrolls into view. */
+.draw-line {
+    transform-origin: left;
+    transition: transform 1.6s var(--ease-out-soft) 0.3s;
+}
+
+.js .draw-line:not(.is-drawn) {
+    transform: scaleX(0);
+}
+
+/* Cross-page fade (View Transitions API; browsers without support simply navigate normally). */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: 0.25s ease-out both fade-out-soft;
+}
+
+::view-transition-new(root) {
+    animation: 0.35s ease-out both fade-in;
+}
+
+@keyframes fade-out-soft {
+    to {
+        opacity: 0;
+    }
+}
+
+.site-header {
+    transition: box-shadow 0.3s ease;
+    view-transition-name: site-header;
+}
+
+.site-header[data-scrolled] {
+    box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .js [data-reveal]:not(.reveal-done),
+    .js [data-reveal-stagger] > :not(.reveal-done) {
+        opacity: 1;
+        transform: none;
+    }
+
+    .js [data-reveal] .heading-bar,
+    .js .heading-bar[data-draw] {
+        transform: none;
+    }
+
+    .js .draw-line:not(.is-drawn) {
+        transform: none;
+    }
+
+    .typewriter-caret,
+    .floating-heart,
+    .ripple {
+        display: none;
+    }
+
+    @view-transition {
+        navigation: none;
     }
 }

@@ -1,10 +1,10 @@
 @php
     $isActive = fn (string ...$names): bool => collect($names)->contains(fn (string $name) => request()->routeIs($name, "*.{$name}"));
-    $linkClass = fn (bool $active): string => 'flex items-center gap-1 px-3 py-2 '.($active ? 'text-accent border-b-2 border-accent' : 'hover:text-accent');
-    $dropdownClass = 'invisible absolute left-0 top-full z-50 min-w-56 rounded-b border-t-2 border-brand bg-white py-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100';
+    $linkClass = fn (bool $active): string => 'flex items-center gap-1 px-3 py-2 '.($active ? 'text-accent border-b-2 border-accent' : 'border-b-2 border-transparent transition-colors hover:border-accent/40 hover:text-accent');
+    $dropdownClass = 'invisible absolute left-0 top-full z-50 min-w-56 translate-y-2 rounded-b border-t-2 border-brand bg-white py-2 opacity-0 shadow-lg transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100';
 @endphp
 
-<header class="sticky top-0 z-40 bg-white shadow">
+<header class="site-header sticky top-0 z-40 bg-white shadow">
     <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4" aria-label="{{ __('Main navigation') }}">
         <a href="{{ localized_route('home') }}" class="shrink-0">
             <img src="{{ asset('images/logo.png') }}" alt="{{ __('Tomader Jonno home') }}" class="h-12 w-auto" width="305" height="360">
@@ -16,20 +16,20 @@
             </li>
             <li class="group relative">
                 <a href="{{ localized_route('about') }}" class="{{ $linkClass($isActive('about', 'team')) }}">
-                    {{ __('Who We Are') }} <x-ui.icon name="chevron-down" class="size-4" />
+                    {{ __('Who We Are') }} <x-ui.icon name="chevron-down" class="size-4 transition-transform duration-200 group-hover:rotate-180" />
                 </a>
                 <div class="{{ $dropdownClass }}">
-                    <a href="{{ localized_route('about') }}" class="block px-4 py-2.5 hover:bg-brand-soft focus:bg-brand-soft">{{ __('About Us') }}</a>
-                    <a href="{{ localized_route('team') }}" class="block px-4 py-2.5 hover:bg-brand-soft focus:bg-brand-soft">{{ __('Management Team') }}</a>
+                    <a href="{{ localized_route('about') }}" class="block px-4 py-2.5 transition-all hover:bg-brand-soft hover:pl-5 focus:bg-brand-soft">{{ __('About Us') }}</a>
+                    <a href="{{ localized_route('team') }}" class="block px-4 py-2.5 transition-all hover:bg-brand-soft hover:pl-5 focus:bg-brand-soft">{{ __('Management Team') }}</a>
                 </div>
             </li>
             <li class="group relative">
                 <a href="{{ localized_route('programs.index') }}" class="{{ $linkClass($isActive('programs.index', 'programs.show')) }}">
-                    {{ __('What We Do') }} <x-ui.icon name="chevron-down" class="size-4" />
+                    {{ __('What We Do') }} <x-ui.icon name="chevron-down" class="size-4 transition-transform duration-200 group-hover:rotate-180" />
                 </a>
                 <div class="{{ $dropdownClass }} w-72">
                     @foreach ($navPrograms as $navProgram)
-                        <a href="{{ localized_route('programs.show', $navProgram) }}" class="flex items-center gap-2 px-4 py-2.5 hover:bg-brand-soft focus:bg-brand-soft">
+                        <a href="{{ localized_route('programs.show', $navProgram) }}" class="flex items-center gap-2 px-4 py-2.5 transition-all hover:bg-brand-soft hover:pl-5 focus:bg-brand-soft">
                             <x-ui.icon :name="$navProgram->icon" class="size-4 text-brand" /> {{ $navProgram->translate('title') }}
                         </a>
                     @endforeach
@@ -50,4 +50,5 @@
             </button>
         </div>
     </nav>
+    <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-linear-to-r from-accent to-red-400" style="transform: scaleX(0)" data-scroll-progress></div>
 </header>

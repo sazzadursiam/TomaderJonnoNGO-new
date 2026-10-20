@@ -20,6 +20,7 @@ class Setting extends Model
         'phone',
         'email',
         'address',
+        'about_image',
         'facebook_url',
         'youtube_url',
         'linkedin_url',
@@ -83,5 +84,15 @@ class Setting extends Model
         foreach ($values as $key => $value) {
             self::query()->updateOrCreate(['key' => $key], ['value' => $value]);
         }
+
+        self::flushCache();
+    }
+
+    /**
+     * Forget the cached settings map (needed when settings change without model events, e.g. in seeders).
+     */
+    public static function flushCache(): void
+    {
+        Cache::forget(self::CACHE_KEY);
     }
 }

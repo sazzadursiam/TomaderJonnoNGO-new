@@ -30,6 +30,7 @@ class ProgramSeeder extends Seeder
                 'slug' => 'education',
                 'icon' => 'education',
                 'title' => ['en' => 'Education', 'bn' => 'শিক্ষা'],
+                'page_title' => ['en' => 'Education Program', 'bn' => 'শিক্ষা কার্যক্রম'],
                 'summary' => ['en' => 'Schooling, early childhood and digital literacy', 'bn' => 'বিদ্যালয় শিক্ষা, শৈশবকালীন বিকাশ ও ডিজিটাল সাক্ষরতা'],
                 'description' => [
                     'en' => 'Every child deserves a place to learn. We support rural students from the first classroom to the first computer.',
@@ -46,6 +47,7 @@ class ProgramSeeder extends Seeder
                 'slug' => 'rehabilitation',
                 'icon' => 'rehabilitation',
                 'title' => ['en' => 'Rehabilitation & Support', 'bn' => 'পুনর্বাসন ও সহায়তা'],
+                'page_title' => ['en' => 'Rehabilitation & Support Program', 'bn' => 'পুনর্বাসন ও সহায়তা কার্যক্রম'],
                 'summary' => ['en' => 'Special needs care and disability inclusion', 'bn' => 'বিশেষ চাহিদাসম্পন্নদের যত্ন ও প্রতিবন্ধী অন্তর্ভুক্তি'],
                 'description' => [
                     'en' => 'We stand with children and families living with disability, so no one is left behind.',
@@ -62,6 +64,7 @@ class ProgramSeeder extends Seeder
                 'slug' => 'womens-empowerment',
                 'icon' => 'women',
                 'title' => ['en' => 'Women\'s Empowerment', 'bn' => 'নারীর ক্ষমতায়ন'],
+                'page_title' => ['en' => 'Women\'s Empowerment Program', 'bn' => 'নারীর ক্ষমতায়ন কার্যক্রম'],
                 'summary' => ['en' => 'Crafts, training and entrepreneurship', 'bn' => 'হস্তশিল্প, প্রশিক্ষণ ও উদ্যোক্তা উন্নয়ন'],
                 'description' => [
                     'en' => 'Our flagship ecosystem: rural employment generation, handicrafts and artisan incubation that give women income, confidence and a voice.',
@@ -82,6 +85,7 @@ class ProgramSeeder extends Seeder
                 'slug' => 'agriculture',
                 'icon' => 'agriculture',
                 'title' => ['en' => 'Agriculture & Social Development', 'bn' => 'কৃষি ও সামাজিক উন্নয়ন'],
+                'page_title' => ['en' => 'Agriculture & Social Development Program', 'bn' => 'কৃষি ও সামাজিক উন্নয়ন কার্যক্রম'],
                 'summary' => ['en' => 'Tree plantation and environment', 'bn' => 'বৃক্ষরোপণ ও পরিবেশ'],
                 'description' => [
                     'en' => 'Healthy communities need a healthy environment. We plant, clean and educate together with local people.',

@@ -23,9 +23,9 @@
 
     <x-section>
         <div class="grid gap-10 lg:grid-cols-2">
-            <div class="space-y-6">
+            <div class="space-y-6" data-reveal-stagger>
                 @if ($amount)
-                    <div class="rounded-xl border-2 border-accent bg-red-50 p-5" role="status">
+                    <div class="animate-fade-up rounded-xl border-2 border-accent bg-red-50 p-5" role="status">
                         <p class="font-semibold text-accent">
                             {{ $frequency === 'monthly'
                                 ? __('You chose a monthly gift of ৳:amount.', ['amount' => local_number($amount)])
@@ -38,7 +38,7 @@
                 <h2 class="text-2xl font-extrabold text-brand">{{ __('How to Donate') }}</h2>
 
                 @if ($mobileRows->isNotEmpty())
-                    <div class="rounded-xl border p-5">
+                    <div class="rounded-xl border p-5 transition duration-300 hover:border-brand/30 hover:shadow-md">
                         <h3 class="flex items-center gap-2 font-bold text-brand"><x-ui.icon name="wallet" /> {{ __('Mobile Banking') }}</h3>
                         <dl class="mt-3 space-y-2">
                             @foreach ($mobileRows as $label => $value)
@@ -52,7 +52,7 @@
                 @endif
 
                 @if ($bankRows->isNotEmpty())
-                    <div class="rounded-xl border p-5">
+                    <div class="rounded-xl border p-5 transition duration-300 hover:border-brand/30 hover:shadow-md">
                         <h3 class="flex items-center gap-2 font-bold text-brand"><x-ui.icon name="bank" /> {{ __('Bank Transfer') }}</h3>
                         <dl class="mt-3 space-y-2">
                             @foreach ($bankRows as $label => $value)
@@ -82,7 +82,7 @@
             </div>
 
             <div>
-                <x-quick-give :tiers="$donationTiers" />
+                <x-quick-give :tiers="$donationTiers" class="animate-slide-in-right lg:sticky lg:top-24" />
             </div>
         </div>
     </x-section>

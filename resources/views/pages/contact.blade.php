@@ -5,10 +5,10 @@
 
     <x-section :heading="__('Get in Touch')">
         <div class="grid gap-10 lg:grid-cols-2">
-            <div class="space-y-4">
+            <div class="space-y-4" data-reveal-stagger>
                 @if (filled($site['phone'] ?? null))
-                    <div class="flex items-start gap-4 rounded-xl border p-4">
-                        <x-ui.icon name="phone" class="mt-1 size-6 text-brand" />
+                    <div class="group flex items-start gap-4 rounded-xl border p-4 transition duration-300 hover:border-brand/30 hover:shadow-md">
+                        <x-ui.icon name="phone" class="mt-1 size-6 text-brand transition-transform duration-300 group-hover:scale-110" />
                         <div>
                             <h3 class="font-bold text-brand">{{ __('Telephone') }}</h3>
                             <a href="tel:{{ preg_replace('/[^0-9+]/', '', $site['phone']) }}" class="hover:text-accent">{{ $site['phone'] }}</a>
@@ -16,8 +16,8 @@
                     </div>
                 @endif
                 @if (filled($site['email'] ?? null))
-                    <div class="flex items-start gap-4 rounded-xl border p-4">
-                        <x-ui.icon name="mail" class="mt-1 size-6 text-brand" />
+                    <div class="group flex items-start gap-4 rounded-xl border p-4 transition duration-300 hover:border-brand/30 hover:shadow-md">
+                        <x-ui.icon name="mail" class="mt-1 size-6 text-brand transition-transform duration-300 group-hover:scale-110" />
                         <div>
                             <h3 class="font-bold text-brand">{{ __('Email') }}</h3>
                             <a href="mailto:{{ $site['email'] }}" class="hover:text-accent">{{ $site['email'] }}</a>
@@ -25,8 +25,8 @@
                     </div>
                 @endif
                 @if (filled($address))
-                    <div class="flex items-start gap-4 rounded-xl border p-4">
-                        <x-ui.icon name="map-pin" class="mt-1 size-6 text-brand" />
+                    <div class="group flex items-start gap-4 rounded-xl border p-4 transition duration-300 hover:border-brand/30 hover:shadow-md">
+                        <x-ui.icon name="map-pin" class="mt-1 size-6 text-brand transition-transform duration-300 group-hover:scale-110" />
                         <div>
                             <h3 class="font-bold text-brand">{{ __('Office Location') }}</h3>
                             <p class="text-gray-600">{{ $address }}</p>
@@ -35,11 +35,11 @@
                 @endif
             </div>
 
-            <div class="rounded-2xl bg-surface p-6">
+            <div class="rounded-2xl bg-surface p-6" data-reveal>
                 <h3 class="mb-4 text-xl font-bold text-brand">{{ __('Send an Inquiry') }}</h3>
 
                 @if (session('status'))
-                    <p class="mb-4 rounded-lg bg-brand-soft p-3 text-sm font-semibold text-brand" role="status">{{ session('status') }}</p>
+                    <p class="mb-4 animate-fade-up rounded-lg bg-brand-soft p-3 text-sm font-semibold text-brand" role="status">{{ session('status') }}</p>
                 @endif
 
                 <form method="POST" action="{{ localized_route('contact.store') }}" class="space-y-4" novalidate>

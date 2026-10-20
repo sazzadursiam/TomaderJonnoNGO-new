@@ -34,7 +34,7 @@ class TeamMemberResource extends Resource
         return $schema
             ->columns(1)
             ->components([
-                BilingualField::make('name', 'Name', required: true),
+                BilingualField::make('name', 'Name (leave empty until known — the role is shown instead)'),
                 BilingualField::make('role', 'Role', required: true),
                 BilingualField::make('bio', 'Short bio', multiline: true, rows: 2),
                 FileUpload::make('photo')
@@ -57,7 +57,7 @@ class TeamMemberResource extends Resource
             ->columns([
                 ImageColumn::make('photo')->disk('public')->circular(),
                 TextColumn::make('name')
-                    ->state(fn (TeamMember $record): string => $record->translate('name', 'en'))
+                    ->state(fn (TeamMember $record): string => $record->translate('name', 'en') ?: '—')
                     ->description(fn (TeamMember $record): string => $record->translate('role', 'en')),
                 ToggleColumn::make('is_published')->label('Published'),
             ])

@@ -6,6 +6,7 @@ use App\Filament\Support\BilingualField;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -49,6 +50,17 @@ class SiteSettings extends Page
                         TextInput::make('phone')->tel()->maxLength(40),
                         TextInput::make('email')->email()->maxLength(120),
                         BilingualField::make('address', 'Office address', multiline: true, rows: 2)->columnSpanFull(),
+                    ]),
+
+                Section::make('About page')
+                    ->collapsible()
+                    ->schema([
+                        FileUpload::make('about_image')
+                            ->label('Photo next to "About Tomader Jonno"')
+                            ->image()
+                            ->disk('public')
+                            ->directory('about')
+                            ->maxSize(4096),
                     ]),
 
                 Section::make('Social links')

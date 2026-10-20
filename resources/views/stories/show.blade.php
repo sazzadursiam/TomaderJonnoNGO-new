@@ -26,7 +26,7 @@
 
     @if ($moreStories->isNotEmpty())
         <x-section :heading="__('More Stories')" muted>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
                 @foreach ($moreStories as $moreStory)
                     <x-story-card :story="$moreStory" />
                 @endforeach

@@ -62,6 +62,23 @@ class PublicPagesTest extends TestCase
             ->assertSee(route('bn.stories.show', $story), false);
     }
 
+    public function test_home_page_shows_donation_steps_and_rotating_taglines_in_both_languages(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('How Your Donation Helps')
+            ->assertSeeInOrder(['You Give', 'We Act', 'Lives Change'])
+            ->assertSee('data-typewriter', false)
+            ->assertSee('livelihoods', false)
+            ->assertSee('a greener tomorrow', false);
+
+        $this->get('/bn')
+            ->assertOk()
+            ->assertSee('আপনার অনুদান কীভাবে কাজ করে')
+            ->assertSeeInOrder(['আপনি দেন', 'আমরা কাজ করি', 'জীবন বদলায়'])
+            ->assertSee('শিশুদের শিক্ষার জন্য');
+    }
+
     public function test_program_page_shows_focus_areas_and_wings(): void
     {
         $program = Program::factory()->create([
@@ -115,6 +132,27 @@ class PublicPagesTest extends TestCase
 
         $this->get('/team')->assertOk()->assertSee('Ayesha Rahman')->assertSee('Executive Director');
         $this->get('/bn/team')->assertOk()->assertSee('আয়েশা রহমান')->assertSee('নির্বাহী পরিচালক');
+    }
+
+    public function test_team_members_without_a_name_show_their_role_as_heading(): void
+    {
+        TeamMember::factory()->create(['name' => ['en' => null, 'bn' => null], 'role' => ['en' => 'Chairperson', 'bn' => 'চেয়ারপারসন']]);
+
+        $this->get('/team')->assertOk()->assertSee('<h3 class="mt-4 font-bold text-accent">Chairperson</h3>', false);
+        $this->get('/bn/team')->assertOk()->assertSee('চেয়ারপারসন');
+    }
+
+    public function test_program_page_uses_its_page_heading_and_falls_back_to_title(): void
+    {
+        $withHeading = Program::factory()->create([
+            'title' => ['en' => 'Education', 'bn' => 'শিক্ষা'],
+            'page_title' => ['en' => 'Education Program', 'bn' => 'শিক্ষা কার্যক্রম'],
+        ]);
+        $withoutHeading = Program::factory()->create(['title' => ['en' => 'Health', 'bn' => null], 'page_title' => null]);
+
+        $this->get(route('programs.show', $withHeading))->assertSee('>Education Program</h1>', false);
+        $this->get(route('bn.programs.show', $withHeading))->assertSee('শিক্ষা কার্যক্রম');
+        $this->get(route('programs.show', $withoutHeading))->assertSee('>Health</h1>', false);
     }
 
     public function test_unknown_program_returns_404(): void

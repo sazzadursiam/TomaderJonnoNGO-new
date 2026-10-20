@@ -20,9 +20,12 @@ class DatabaseSeeder extends Seeder
             ProgramSeeder::class,
             StatSeeder::class,
             StorySeeder::class,
+            TeamMemberSeeder::class,
         ]);
 
         if (app()->isLocal()) {
+            $this->call(DemoContentSeeder::class);
+
             User::query()->firstOrCreate(
                 ['email' => 'admin@tomaderjonno.org'],
                 ['name' => 'Admin', 'password' => 'password'],

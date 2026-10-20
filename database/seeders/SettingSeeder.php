@@ -25,5 +25,7 @@ class SettingSeeder extends Seeder
         foreach ($defaults as $key => $value) {
             Setting::query()->firstOrCreate(['key' => $key], ['value' => $value]);
         }
+
+        Setting::flushCache();
     }
 }

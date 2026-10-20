@@ -32,6 +32,8 @@
 
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
+    <script>document.documentElement.classList.add('js')</script>
+
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -49,5 +51,10 @@
     </main>
 
     <x-site.footer />
+
+    <button type="button" data-back-to-top tabindex="-1" aria-label="{{ __('Back to top') }}"
+            class="pointer-events-none fixed right-4 bottom-4 z-30 flex size-12 translate-y-4 items-center justify-center rounded-full bg-brand text-white opacity-0 shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-brand-dark">
+        <x-ui.icon name="chevron-down" class="size-6 rotate-180" />
+    </button>
 </body>
 </html>

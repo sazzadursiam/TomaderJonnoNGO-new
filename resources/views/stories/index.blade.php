@@ -5,7 +5,7 @@
         @if ($stories->isEmpty())
             <p class="text-gray-600">{{ __('Stories will be published soon.') }}</p>
         @else
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
                 @foreach ($stories as $story)
                     <x-story-card :story="$story" />
                 @endforeach

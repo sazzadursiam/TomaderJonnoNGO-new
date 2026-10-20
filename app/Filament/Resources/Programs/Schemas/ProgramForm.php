@@ -45,7 +45,8 @@ class ProgramForm
 
                 Section::make('Content')
                     ->schema([
-                        BilingualField::make('title', 'Title', required: true),
+                        BilingualField::make('title', 'Title (menu & cards)', required: true),
+                        BilingualField::make('page_title', 'Page heading (optional — defaults to the title)'),
                         BilingualField::make('summary', 'Card summary', required: true),
                         BilingualField::make('description', 'Page introduction', multiline: true, required: true),
                         BilingualField::make('overview', 'Program overview (optional)', multiline: true, rows: 4),
