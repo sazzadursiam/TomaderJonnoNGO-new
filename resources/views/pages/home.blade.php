@@ -12,8 +12,8 @@
             </div>
         </div>
 
-        <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-10 lg:grid-cols-2 lg:py-16">
-            <div>
+        <div class="mx-auto max-w-7xl px-4 py-10 lg:py-16">
+            <div class="max-w-3xl">
                 <span class="mb-4 inline-flex animate-fade-up items-center gap-2 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
                     <x-ui.icon name="heart" class="size-3.5 animate-heartbeat text-red-300" />
                     {{ __('Helping people grow, building better communities.') }}
@@ -30,17 +30,12 @@
                     <span class="text-accent" data-typewriter-text>{{ $rotatingWords[0] }}</span><span class="typewriter-caret text-accent" aria-hidden="true"></span>
                 </p>
                 <div class="mt-6 flex animate-fade-up flex-wrap gap-3 [animation-delay:260ms]">
-                    <a href="{{ localized_route('donate') }}" class="btn-donate">
-                        <x-ui.icon name="heart" class="size-4" /> {{ __('Donate Now') }}
-                    </a>
                     <a href="{{ localized_route('programs.index') }}" class="btn-outline group">
                         {{ __('Explore Our Programs') }}
                         <x-ui.icon name="arrow-right" class="size-4 transition-transform group-hover:translate-x-1" />
                     </a>
                 </div>
             </div>
-
-            <x-quick-give id="give" :tiers="$donationTiers" class="animate-slide-in-right [animation-delay:200ms]" />
         </div>
     </section>
 

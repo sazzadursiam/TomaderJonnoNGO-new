@@ -103,101 +103,6 @@ function initCounters() {
 }
 
 /**
- * Quick Give box: frequency tabs, preset amounts, custom amount and impact text.
- */
-function initQuickGive() {
-    document.querySelectorAll('[data-quick-give]').forEach((root) => {
-        const impact = root.querySelector('[data-impact-text]');
-        const customInput = root.querySelector('[data-custom-amount]');
-        const donateLink = root.querySelector('[data-donate-link]');
-        const minimum = Number(root.dataset.minimum || 0);
-        const messages = JSON.parse(root.dataset.messages);
-
-        let frequency = 'monthly';
-        let amount = 0;
-
-        const tiersFor = (mode) =>
-            [...root.querySelectorAll(`[data-amount-button][data-frequency="${mode}"]`)].map((button) => ({
-                amount: Number(button.dataset.amount),
-                impact: button.dataset.impact,
-            }));
-
-        const updateImpact = () => {
-            const tiers = tiersFor(frequency);
-
-            impact.classList.remove('animate-fade-in');
-            void impact.offsetWidth;
-            impact.classList.add('animate-fade-in');
-
-            if (!amount) {
-                impact.textContent = messages.empty;
-            } else if (amount < minimum) {
-                impact.textContent = messages.minimum.replace(':amount', formatNumber(minimum));
-            } else {
-                const tier = tiers.filter((candidate) => amount >= candidate.amount).pop() ?? tiers[0];
-                impact.textContent = messages[frequency].replace(':amount', formatNumber(amount)).replace(':impact', tier.impact);
-            }
-
-            const url = new URL(donateLink.dataset.baseUrl, window.location.origin);
-            url.searchParams.set('frequency', frequency);
-
-            if (amount >= minimum) {
-                url.searchParams.set('amount', String(amount));
-            }
-
-            donateLink.href = url.toString();
-        };
-
-        const selectButton = (selected) => {
-            root.querySelectorAll('[data-amount-button], [data-custom-button]').forEach((button) =>
-                button.setAttribute('aria-pressed', String(button === selected)),
-            );
-        };
-
-        const setFrequency = (mode) => {
-            frequency = mode;
-
-            root.querySelectorAll('[data-frequency-tab]').forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.frequencyTab === mode)));
-            root.querySelectorAll('[data-amount-button]').forEach((button) => button.classList.toggle('hidden', button.dataset.frequency !== mode));
-
-            const buttons = root.querySelectorAll(`[data-amount-button][data-frequency="${mode}"]`);
-            const preset = buttons[mode === 'monthly' ? 1 : 0] ?? buttons[0];
-
-            customInput.classList.add('hidden');
-            selectButton(preset);
-            amount = Number(preset.dataset.amount);
-            updateImpact();
-        };
-
-        root.querySelectorAll('[data-frequency-tab]').forEach((tab) => tab.addEventListener('click', () => setFrequency(tab.dataset.frequencyTab)));
-
-        root.querySelectorAll('[data-amount-button]').forEach((button) =>
-            button.addEventListener('click', () => {
-                customInput.classList.add('hidden');
-                selectButton(button);
-                amount = Number(button.dataset.amount);
-                updateImpact();
-            }),
-        );
-
-        root.querySelector('[data-custom-button]').addEventListener('click', (event) => {
-            selectButton(event.currentTarget);
-            customInput.classList.remove('hidden');
-            customInput.focus();
-            amount = Number(customInput.value) || 0;
-            updateImpact();
-        });
-
-        customInput.addEventListener('input', () => {
-            amount = Math.max(0, Math.floor(Number(customInput.value) || 0));
-            updateImpact();
-        });
-
-        setFrequency('monthly');
-    });
-}
-
-/**
  * Scroll reveal: fade elements up as they enter the viewport. Children of [data-reveal-stagger] get increasing delays.
  */
 function initReveal() {
@@ -552,7 +457,6 @@ function initLightbox() {
 initDrawer();
 initLightbox();
 initCounters();
-initQuickGive();
 initReveal();
 initScrollState();
 initParallax();

@@ -1,7 +1,4 @@
 @php
-    $amount = filter_var(request()->query('amount'), FILTER_VALIDATE_INT, ['options' => ['min_range' => config('donation.minimum')]]) ?: null;
-    $frequency = request()->query('frequency') === 'once' ? 'once' : 'monthly';
-
     $bankRows = collect([
         __('Bank') => $site['donation_bank_name'] ?? null,
         __('Account name') => $site['donation_account_name'] ?? null,
@@ -22,19 +19,8 @@
     <x-page-header :title="__('Donate')" :intro="__('Your gift helps children learn, women earn, and communities grow. Thank you for standing with us.')" />
 
     <x-section>
-        <div class="grid gap-10 lg:grid-cols-2">
+        <div class="mx-auto max-w-3xl">
             <div class="space-y-6" data-reveal-stagger>
-                @if ($amount)
-                    <div class="animate-fade-up rounded-xl border-2 border-accent bg-red-50 p-5" role="status">
-                        <p class="font-semibold text-accent">
-                            {{ $frequency === 'monthly'
-                                ? __('You chose a monthly gift of ৳:amount.', ['amount' => local_number($amount)])
-                                : __('You chose a one-time gift of ৳:amount.', ['amount' => local_number($amount)]) }}
-                        </p>
-                        <p class="mt-1 text-sm text-gray-700">{{ __('Please send your gift using one of the methods below.') }}</p>
-                    </div>
-                @endif
-
                 <h2 class="text-2xl font-extrabold text-brand">{{ __('How to Donate') }}</h2>
 
                 @if ($mobileRows->isNotEmpty())
@@ -79,10 +65,6 @@
                     {{ __('After sending your gift, please let us know so we can thank you and share a receipt.') }}
                     <a href="{{ localized_route('contact') }}" class="font-semibold text-accent hover:underline">{{ __('Contact us') }}</a>
                 </p>
-            </div>
-
-            <div>
-                <x-quick-give :tiers="$donationTiers" class="animate-slide-in-right lg:sticky lg:top-24" />
             </div>
         </div>
     </x-section>

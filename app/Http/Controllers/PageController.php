@@ -16,7 +16,6 @@ class PageController extends Controller
             'programs' => Program::query()->published()->get(),
             'stats' => Stat::query()->ordered()->get(),
             'stories' => Story::query()->published()->take(3)->get(),
-            'donationTiers' => config('donation.tiers'),
         ]);
     }
 
@@ -34,8 +33,6 @@ class PageController extends Controller
 
     public function donate(): View
     {
-        return view('pages.donate', [
-            'donationTiers' => config('donation.tiers'),
-        ]);
+        return view('pages.donate');
     }
 }

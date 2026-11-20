@@ -30,16 +30,4 @@ class DonatePageTest extends TestCase
     {
         $this->get('/donate')->assertOk()->assertSee('Donation details will be published soon.');
     }
-
-    public function test_the_chosen_quick_give_amount_is_confirmed(): void
-    {
-        $this->get('/donate?amount=2500&frequency=once')->assertSee('You chose a one-time gift of ৳2,500.');
-        $this->get('/bn/donate?amount=1000&frequency=monthly')->assertSee('আপনি মাসিক ৳১,০০০ অনুদান বেছে নিয়েছেন।');
-    }
-
-    public function test_invalid_amounts_are_ignored(): void
-    {
-        $this->get('/donate?amount=10')->assertDontSee('You chose');
-        $this->get('/donate?amount=abc')->assertDontSee('You chose');
-    }
 }
