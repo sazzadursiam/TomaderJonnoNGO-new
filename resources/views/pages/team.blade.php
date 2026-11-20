@@ -6,18 +6,18 @@
         @if ($members->isEmpty())
             <p class="text-gray-600">{{ __('Team profiles will be added soon.') }}</p>
         @else
-            <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+            <ul class="flex flex-wrap justify-center gap-6" data-reveal-stagger>
                 @foreach ($members as $member)
                     @php
                         $name = $member->translate('name');
                         $role = $member->translate('role');
                     @endphp
-                    <li class="group rounded-xl border bg-white p-5 text-center transition duration-300 hover:-translate-y-1.5 hover:border-brand/30 hover:shadow-xl">
+                    <li class="group w-full rounded-xl border bg-white p-5 text-center transition duration-300 hover:-translate-y-1.5 hover:border-brand/30 hover:shadow-xl sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
                         @if ($member->photo)
                             <img src="{{ media_url($member->photo) }}" alt="{{ $name ?: $role }}" loading="lazy"
-                                 class="mx-auto size-24 rounded-full object-cover ring-4 ring-brand-soft transition duration-300 group-hover:scale-105 group-hover:ring-brand/30">
+                                 class="mx-auto size-32 rounded-full object-cover object-top ring-4 ring-brand-soft transition duration-300 group-hover:scale-105 group-hover:ring-brand/30">
                         @else
-                            <div class="mx-auto flex size-24 items-center justify-center rounded-full bg-linear-to-br from-brand to-emerald-500 text-white">
+                            <div class="mx-auto flex size-32 items-center justify-center rounded-full bg-linear-to-br from-brand to-emerald-500 text-white">
                                 <x-ui.icon name="user" class="size-10" />
                             </div>
                         @endif
