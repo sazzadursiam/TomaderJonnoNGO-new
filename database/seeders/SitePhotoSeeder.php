@@ -14,7 +14,8 @@ use Illuminate\Support\Str;
  *
  * Photos are copied (resized to a web-friendly width) onto the public disk so they behave exactly like
  * admin uploads. Only empty fields or generated demo placeholders are replaced — photos chosen in the
- * admin panel are never overwritten. Safe to run in every environment.
+ * admin panel are never overwritten, though new gallery photos are appended after them. Safe to run in
+ * every environment.
  */
 class SitePhotoSeeder extends Seeder
 {
@@ -42,17 +43,17 @@ class SitePhotoSeeder extends Seeder
     private function placeProgramPhotos(): void
     {
         $programs = [
-            'education' => ['cover' => [self::EDUCATION, 6], 'gallery' => [self::EDUCATION, [2, 7, 1, 4, 3, 5]]],
-            'rehabilitation' => ['cover' => [self::REHABILITATION, 1], 'gallery' => [self::REHABILITATION, [2, 3, 1]]],
+            'education' => ['cover' => [self::EDUCATION, 6], 'gallery' => [self::EDUCATION, [2, 7, 1, 4, 3, 5, 8, 9, 10, 11, 12, 13, 14, 15]]],
+            'rehabilitation' => ['cover' => [self::REHABILITATION, 1], 'gallery' => [self::REHABILITATION, [2, 3, 1, 4, 5, 6]]],
             'womens-empowerment' => ['cover' => [self::WOMEN, 15]],
             'agriculture' => ['cover' => [self::AGRICULTURE, 3], 'gallery' => [self::AGRICULTURE, [1, 2, 3]]],
         ];
 
         $womenWings = [
-            [1, 19, 8, 27, 28, 20, 21, 23],
-            [11, 12, 10, 17, 2, 4, 13, 14],
+            [1, 19, 8, 27, 28, 20, 21, 23, 37, 38, 39, 40, 42],
+            [11, 12, 10, 17, 2, 4, 13, 14, 33, 34, 35, 41, 43, 44, 45],
             [16, 24],
-            [22, 18, 15],
+            [22, 18, 15, 30, 31, 32, 36],
         ];
 
         foreach ($programs as $slug => $photos) {
@@ -68,17 +69,16 @@ class SitePhotoSeeder extends Seeder
                 $updates['image'] = $this->copy(...$photos['cover']);
             }
 
-            if (isset($photos['gallery']) && $this->isReplaceableList($program->gallery)) {
-                [$folder, $numbers] = $photos['gallery'];
-                $updates['gallery'] = $this->copyMany($folder, $numbers);
+            if (isset($photos['gallery'])) {
+                $updates['gallery'] = $this->withPhotos($program->gallery, ...$photos['gallery']);
             }
 
             if ($slug === 'womens-empowerment' && filled($program->wings)) {
                 $wings = $program->wings;
 
                 foreach ($wings as $index => $wing) {
-                    if (isset($womenWings[$index]) && $this->isReplaceableList($wing['images'] ?? [])) {
-                        $wings[$index]['images'] = $this->copyMany(self::WOMEN, $womenWings[$index]);
+                    if (isset($womenWings[$index])) {
+                        $wings[$index]['images'] = $this->withPhotos($wing['images'] ?? [], self::WOMEN, $womenWings[$index]);
                     }
                 }
 
@@ -133,6 +133,26 @@ class SitePhotoSeeder extends Seeder
         $paths = array_filter($paths ?? []);
 
         return $paths === [] || collect($paths)->every(fn (string $path): bool => $this->isReplaceable($path));
+    }
+
+    /**
+     * Fill an empty or placeholder photo list, or append the photos missing from a list chosen in the admin panel.
+     *
+     * @param  array<int, string|null>|null  $current
+     * @param  list<int>  $numbers
+     * @return list<string>
+     */
+    private function withPhotos(?array $current, string $folder, array $numbers): array
+    {
+        $photos = $this->copyMany($folder, $numbers);
+
+        if ($this->isReplaceableList($current)) {
+            return $photos;
+        }
+
+        $current = array_values(array_filter($current));
+
+        return [...$current, ...array_values(array_diff($photos, $current))];
     }
 
     /**

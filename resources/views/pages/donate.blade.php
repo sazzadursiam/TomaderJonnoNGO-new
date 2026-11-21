@@ -12,6 +12,9 @@
         'Nagad' => $site['donation_nagad'] ?? null,
     ])->filter();
 
+    $mobileLogos = ['bKash' => 'images/payment/bkash.svg'];
+    $bankLogo = str_contains(strtolower($site['donation_bank_name'] ?? ''), 'rupali') ? 'images/payment/rupali-bank.svg' : null;
+
     $note = translated($site['donation_note'] ?? null);
 @endphp
 
@@ -28,8 +31,14 @@
                         <h3 class="flex items-center gap-2 font-bold text-brand"><x-ui.icon name="wallet" /> {{ __('Mobile Banking') }}</h3>
                         <dl class="mt-3 space-y-2">
                             @foreach ($mobileRows as $label => $value)
-                                <div class="flex flex-wrap justify-between gap-2 border-b pb-2 last:border-0">
-                                    <dt class="text-gray-600">{{ $label }}</dt>
+                                <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-0">
+                                    <dt class="text-gray-600">
+                                        @isset($mobileLogos[$label])
+                                            <img src="{{ asset($mobileLogos[$label]) }}" alt="{{ $label }}" class="h-9 w-auto" loading="lazy">
+                                        @else
+                                            {{ $label }}
+                                        @endisset
+                                    </dt>
                                     <dd class="font-semibold select-all">{{ $value }}</dd>
                                 </div>
                             @endforeach
@@ -39,7 +48,12 @@
 
                 @if ($bankRows->isNotEmpty())
                     <div class="rounded-xl border p-5 transition duration-300 hover:border-brand/30 hover:shadow-md">
-                        <h3 class="flex items-center gap-2 font-bold text-brand"><x-ui.icon name="bank" /> {{ __('Bank Transfer') }}</h3>
+                        <h3 class="flex flex-wrap items-center gap-2 font-bold text-brand">
+                            <x-ui.icon name="bank" /> {{ __('Bank Transfer') }}
+                            @if ($bankLogo)
+                                <img src="{{ asset($bankLogo) }}" alt="{{ $site['donation_bank_name'] }}" class="ml-auto h-6 w-auto" loading="lazy">
+                            @endif
+                        </h3>
                         <dl class="mt-3 space-y-2">
                             @foreach ($bankRows as $label => $value)
                                 <div class="flex flex-wrap justify-between gap-2 border-b pb-2 last:border-0">

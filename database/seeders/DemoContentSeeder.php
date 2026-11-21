@@ -47,22 +47,11 @@ class DemoContentSeeder extends Seeder
     private function fillSettings(): void
     {
         $defaults = [
-            'address' => [
-                'en' => 'House 12, Road 5, Block C, Mirpur 10, Dhaka 1216, Bangladesh (sample address)',
-                'bn' => 'বাড়ি ১২, রোড ৫, ব্লক সি, মিরপুর ১০, ঢাকা ১২১৬, বাংলাদেশ (নমুনা ঠিকানা)',
-            ],
             'about_image' => fn () => $this->image('about/community.jpg', 'Community meeting', 0, 1200, 800),
             'facebook_url' => 'https://www.facebook.com/',
             'youtube_url' => 'https://www.youtube.com/',
             'linkedin_url' => 'https://www.linkedin.com/',
             'x_url' => 'https://x.com/',
-            'donation_bkash' => '01700-000000 (sample)',
-            'donation_nagad' => '01800-000000 (sample)',
-            'donation_bank_name' => 'Sample Bank PLC',
-            'donation_account_name' => 'Tomader Jonno',
-            'donation_account_number' => '0000-0000-0000-0 (sample)',
-            'donation_branch' => 'Mirpur Branch, Dhaka',
-            'donation_routing_number' => '000000000',
         ];
 
         foreach ($defaults as $key => $value) {

@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Program;
+use App\Models\Setting;
 use App\Models\Stat;
 use App\Models\Story;
 use App\Models\TeamMember;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SettingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -124,6 +126,21 @@ class PublicPagesTest extends TestCase
             ->assertSee('<p>First paragraph.</p>', false)
             ->assertSee('<p>Second paragraph.</p>', false)
             ->assertSee($other->translate('title'));
+    }
+
+    public function test_the_office_address_is_seeded_and_replaces_the_sample(): void
+    {
+        Setting::store(['address' => ['en' => 'House 12, Mirpur 10, Dhaka (sample address)', 'bn' => 'নমুনা ঠিকানা']]);
+
+        $this->seed(SettingSeeder::class);
+
+        $this->get('/contact')->assertOk()->assertSee('Master Para, Gabtali, Bogura')->assertDontSee('sample address');
+        $this->get('/bn/contact')->assertOk()->assertSee('মাস্টার পাড়া, গাবতলী, বগুড়া');
+
+        Setting::store(['address' => ['en' => 'New Office, Bogura', 'bn' => null]]);
+        $this->seed(SettingSeeder::class);
+
+        $this->assertSame('New Office, Bogura', Setting::get('address')['en']);
     }
 
     public function test_team_page_lists_published_members(): void

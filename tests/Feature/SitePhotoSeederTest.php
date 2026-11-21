@@ -25,8 +25,9 @@ class SitePhotoSeederTest extends TestCase
         $women = Program::query()->where('slug', 'womens-empowerment')->firstOrFail();
 
         $this->assertSame('photos/education/6.jpg', $education->image);
-        $this->assertCount(6, $education->gallery);
-        $this->assertSame([8, 8, 2, 3], array_map(fn (array $wing) => count($wing['images']), $women->wings));
+        $this->assertCount(14, $education->gallery);
+        $this->assertSame('photos/education/15.jpg', $education->gallery[13]);
+        $this->assertSame([13, 15, 2, 7], array_map(fn (array $wing) => count($wing['images']), $women->wings));
         Storage::disk('public')->assertExists($women->wings[2]['images'][0]);
 
         $this->assertSame('photos/womens-empowerment/16.jpg', Story::query()->where('slug', 'a-salon-of-her-own')->value('image'));
@@ -50,5 +51,27 @@ class SitePhotoSeederTest extends TestCase
 
         $this->assertSame('programs/chosen-by-admin.jpg', $education->fresh()->image);
         $this->assertSame('photos/womens-empowerment/11.jpg', $story->fresh()->image);
+    }
+
+    public function test_new_photos_are_appended_after_a_gallery_chosen_by_an_admin(): void
+    {
+        Storage::fake('public');
+        $this->seed(DatabaseSeeder::class);
+
+        $rehabilitation = Program::query()->where('slug', 'rehabilitation')->firstOrFail();
+        $rehabilitation->update(['gallery' => ['programs/admin-1.jpg', 'photos/rehabilitation-support/2.jpg']]);
+
+        $this->seed(SitePhotoSeeder::class);
+        $this->seed(SitePhotoSeeder::class);
+
+        $this->assertSame([
+            'programs/admin-1.jpg',
+            'photos/rehabilitation-support/2.jpg',
+            'photos/rehabilitation-support/3.jpg',
+            'photos/rehabilitation-support/1.jpg',
+            'photos/rehabilitation-support/4.jpg',
+            'photos/rehabilitation-support/5.jpg',
+            'photos/rehabilitation-support/6.jpg',
+        ], $rehabilitation->fresh()->gallery);
     }
 }
