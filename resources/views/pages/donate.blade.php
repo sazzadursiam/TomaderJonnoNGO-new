@@ -12,7 +12,10 @@
         'Nagad' => $site['donation_nagad'] ?? null,
     ])->filter();
 
-    $mobileLogos = ['bKash' => 'images/payment/bkash.svg'];
+    $mobileLogos = collect([
+        'bKash' => ['images/payment/bkash.svg'],
+        'Nagad' => ['images/payment/nagad.svg', 'images/payment/nagad.png'],
+    ])->map(fn (array $paths) => collect($paths)->first(fn (string $path) => is_file(public_path($path))))->filter()->all();
     $bankLogo = str_contains(strtolower($site['donation_bank_name'] ?? ''), 'rupali') ? 'images/payment/rupali-bank.svg' : null;
 
     $note = translated($site['donation_note'] ?? null);

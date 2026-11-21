@@ -59,6 +59,13 @@ class DonatePageTest extends TestCase
         $this->assertSame('01711111111', Setting::get('donation_bkash'));
     }
 
+    public function test_the_nagad_number_is_shown_once_it_is_set(): void
+    {
+        Setting::store(['donation_nagad' => '01811111111']);
+
+        $this->get('/donate')->assertOk()->assertSee('01811111111')->assertSee('Nagad');
+    }
+
     public function test_a_placeholder_is_shown_when_no_details_exist(): void
     {
         $this->get('/donate')->assertOk()->assertSee('Donation details will be published soon.');
